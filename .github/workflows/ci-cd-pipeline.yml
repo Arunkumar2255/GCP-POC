@@ -1,0 +1,96 @@
+name: Create resources using Terraform on GCP
+
+on:
+  push:
+    branches: 
+      - main
+
+jobs:
+  terraform-gcp:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout Repository
+      - name: Check out Git Repository
+        uses: actions/checkout@v3
+
+      # Cache TFLint plugins directory to speed up subsequent runs
+      - name: Cache TFLint plugins directory
+        uses: actions/cache@v2
+        with:
+          path: ~/.tflint.d/plugins
+          key: ${{ runner.os }}-tflint-${{ hashFiles('.tflint.hcl') }}
+
+      # Set up TFLint
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v2
+        with:
+          github_token: ${{ secrets.GKE_GITHUB_TOKEN }}
+
+      # Print TFLint version
+      - name: Show TFLint version
+        run: tflint --version
+
+      # Initialize TFLint plugins
+      - name: Initialize TFLint
+        run: tflint --init
+
+      # Run TFLint checks recursively in all directories
+      - name: Run TFLint
+        run: tflint -f compact --recursive --force
+
+      # Fail the pipeline if TFLint detects any errors
+      - name: Check TFLint Exit Code
+        run: |
+          tflint -f json --recursive | jq -e '.issues | length == 0' || exit 1
+
+      # Install the latest version of Terraform CLI and configure the Terraform CLI configuration
+      - name: Install Terraform
+        run: |
+          wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+          sudo apt update && sudo apt install terraform
+
+      # Authenticate via SAKE
+      - name: 'Authenticate via SAKE'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.SERVICE_ACCOUNT_KEY_JSON }}'
+      - name: Verify credentials file
+        run: ls -la /home/runner/work/GCP-CICD-INFRA/GCP-CICD-INFRA/
+
+      # Initialize Terraform
+      - name: Terraform Init
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT_KEY_JSON }}
+        working-directory: GKE_DevSecops
+        run: terraform init
+
+      # Checks that all Terraform configuration files adhere to a canonical format
+      - name: Terraform Format
+        run: terraform fmt
+
+      # Run TFLint again after initialization (optional)
+      - name: Terraform lint
+        run: tflint 
+
+      # Generates an execution plan for Terraform
+      - name: Terraform Plan
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT_KEY_JSON }}
+        run: terraform plan
+
+      # Apply Terraform configuration
+      - name: Terraform Apply
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT_KEY_JSON }}
+        run: terraform apply -auto-approve -input=false
+
+      # Destroy resources (optional)
+      - name: Terraform Destroy
+        if: always()
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT_KEY_JSON }}
+        run: terraform destroy -auto-approve -input=false
+
+
