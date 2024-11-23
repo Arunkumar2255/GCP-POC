@@ -39,9 +39,21 @@ jobs:
       #- name: Run TFLint
        # run: tflint -f compact --recursive --force
 
-      - name: Run TFLint and Ignore Warnings
+      # - name: Run TFLint and Ignore Warnings
+      #   run: |
+      #      tflint -f compact --recursive --force || echo "Warnings ignored, only errors fail the pipeline."
+
+      - name: Run TFLint and Fail on Errors Only
         run: |
-           tflint -f compact --recursive --force || echo "Warnings ignored, only errors fail the pipeline."
+          tflint -f json --recursive > tflint-result.json
+          if jq -e '.issues | map(select(.severity == "ERROR")) | length == 0' tflint-result.json; then
+          echo "No critical errors found by TFLint."
+          else
+          echo "TFLint found critical errors. Fix them before proceeding."
+          cat tflint-result.json | jq
+          exit 1
+          fi
+
 
 
       # Fail the pipeline if TFLint detects any errors
