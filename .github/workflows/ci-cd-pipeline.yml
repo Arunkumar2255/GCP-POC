@@ -57,7 +57,7 @@ jobs:
         with:
           credentials_json: '${{ secrets.SERVICE_ACCOUNT_KEY_JSON }}'
       - name: Verify credentials file
-        run: ls -la /home/runner/work/GCP-CICD-INFRA/GCP-CICD-INFRA/
+        run: ls -la /home/runner/work/GCP-POC/
 
       # Initialize Terraform
       - name: Terraform Init
