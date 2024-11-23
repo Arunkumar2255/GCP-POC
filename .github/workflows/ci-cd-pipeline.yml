@@ -63,7 +63,7 @@ jobs:
       - name: Terraform Init
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-        working-directory: GKE_DevSecops
+        working-directory: GCP-POC
         run: terraform init
 
       # Checks that all Terraform configuration files adhere to a canonical format
