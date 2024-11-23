@@ -59,12 +59,28 @@ jobs:
       - name: Verify credentials file
         run: ls -la /home/runner/work/GCP-POC/
 
+              # Write credentials JSON to a file
+      - name: Write Credentials to File
+        run: echo '${{ secrets.GOOGLE_CREDENTIALS }}' > $HOME/sa-key.json
+
+      # Verify the credentials file
+      - name: Verify Credentials File
+        run: ls -la $HOME/sa-key.json && cat $HOME/sa-key.json
+
       # Initialize Terraform
       - name: Terraform Init
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+          GOOGLE_APPLICATION_CREDENTIALS: $HOME/sa-key.json
         working-directory: GKE_DevSecops
         run: terraform init
+
+
+      # Initialize Terraform
+      # - name: Terraform Init
+      #   env:
+      #     GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+      #   working-directory: GKE_DevSecops
+      #   run: terraform init
 
       # Checks that all Terraform configuration files adhere to a canonical format
       - name: Terraform Format
