@@ -75,10 +75,10 @@ variable "node_disk_size_gb" {
 #   type        = number
 #   default     = 1
 # }
-variable "node_disk_type" {
-  description = "The disk type for the worker nodes (e.g., pd-standard)"
-  type        = string
-}
+# variable "node_disk_type" {
+#   description = "The disk type for the worker nodes (e.g., pd-standard)"
+#   type        = string
+# }
 
 # variable "secondary_ip_range" {
 #   type = list(string)

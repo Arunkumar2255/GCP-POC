@@ -1,3 +1,26 @@
+terraform {
+  required_version = ">= 1.3.0"
+  required_providers {
+    google = {
+      source = "hashicorp/google"
+      version = "4.51.0"
+   }
+    null = {
+      source  = "hashicorp/null"
+      version = "~> 3.0"
+    }
+    template = {
+      source  = "hashicorp/template"
+      version = "~> 2.2"
+    }
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = "~> 4.51.0"
+    }
+  }
+}
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # DEPLOY A CLOUD SQL CLUSTER
 # This module deploys a Cloud SQL MySQL cluster. The cluster is managed by Google and automatically handles leader
@@ -21,7 +44,7 @@ terraform {
 locals {
   # Determine the engine type
   is_postgres = replace(var.engine, "POSTGRES", "") != var.engine
-  is_mysql    = replace(var.engine, "MYSQL", "") != var.engine
+  # is_mysql    = replace(var.engine, "MYSQL", "") != var.engine
 
   # Calculate actuals, so we get expected behavior for each engine
   actual_binary_log_enabled     = local.is_postgres ? false : var.mysql_binary_log_enabled
@@ -317,6 +340,7 @@ resource "google_sql_database_instance" "read_replica" {
 # ------------------------------------------------------------------------------
 # CREATE A TEMPLATE FILE TO SIGNAL ALL RESOURCES HAVE BEEN CREATED
 # ------------------------------------------------------------------------------
+
 
 data "template_file" "complete" {
   depends_on = [

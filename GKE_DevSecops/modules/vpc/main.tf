@@ -1,3 +1,13 @@
+terraform {
+  required_version = ">= 1.3.0"
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 4.51.0"
+    }
+  }
+}
+
 resource "google_compute_network" "vpc_network" {
   name                    = var.vpc
   auto_create_subnetworks = false
@@ -56,7 +66,7 @@ resource "google_compute_firewall" "allow-ssh" {
   }
 
   source_ranges = var.source_ranges
-  target_tags   = ["${var.cluster_name}"]
+  target_tags   = [var.cluster_name]
 }
 
 resource "google_compute_firewall" "bastion_firewall" {
@@ -72,5 +82,5 @@ resource "google_compute_firewall" "bastion_firewall" {
   }
 
   source_ranges = ["0.0.0.0/0"]  
-  target_tags   = ["${var.jump-host}"]
+  target_tags   = [var.jump-host]
 }

@@ -3,10 +3,10 @@ variable "project" {
   description = "Google Cloud Project Name"
 }
 
-variable "region" {
-  type        = string
-  description = "Default Google Cloud Region"
-}
+# variable "region" {
+#   type        = string
+#   description = "Default Google Cloud Region"
+# }
 
 variable "vpc" {
   type        = string
@@ -18,10 +18,10 @@ variable "gke_subnet_name" {
   description = "GKE Subnet Name"
 }
 
-variable "gke_subnet_region" {
-  type        = string
-  description = "GKE Subnet Region"
-}
+# variable "gke_subnet_region" {
+#   type        = string
+#   description = "GKE Subnet Region"
+# }
 
 variable "gke_subnet_cidr" {
   type        = string
@@ -78,12 +78,12 @@ variable "node_disk_size_gb" {
   description = "The disk size in GB for the worker nodes"
   type        = number
 }
-variable "node_count" {
-  description = "The number of nodes in the pool"
-  type        = number
-  default     = 1
-}
-variable "node_disk_type" {
-  description = "The disk type for the worker nodes (e.g., pd-standard)"
-  type        = string
-}
+# variable "node_count" {
+#   description = "The number of nodes in the pool"
+#   type        = number
+#   default     = 1
+# }
+# variable "node_disk_type" {
+#   description = "The disk type for the worker nodes (e.g., pd-standard)"
+#   type        = string
+# }

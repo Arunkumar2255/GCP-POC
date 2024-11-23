@@ -1,3 +1,13 @@
+terraform {
+  required_version = ">= 1.3.0"
+  required_providers {
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = "~> 4.51.0"
+    }
+  }
+}
+
 # https://www.terraform.io/docs/providers/google/r/container_cluster.html
 resource "google_container_cluster" "cluster" {
   provider = google-beta
@@ -130,7 +140,7 @@ resource "google_container_node_pool" "standard" {
     ]
 
     # Tags are used to identify valid sources or targets for network firewalls.
-    tags = ["${var.cluster_name}"]
+    tags = [var.cluster_name]
   }
 
 

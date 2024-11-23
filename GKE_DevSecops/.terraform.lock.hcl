@@ -22,20 +22,22 @@ provider "registry.terraform.io/hashicorp/google" {
 }
 
 provider "registry.terraform.io/hashicorp/google-beta" {
-  version     = "3.57.0"
-  constraints = "~> 3.57.0"
+  version     = "4.51.0"
+  constraints = "~> 4.51.0"
   hashes = [
-    "h1:5BxXOxWNGUuPkFCHrmG8ZXvah0h53xhrUdlwvIQrtXQ=",
-    "zh:226ad14493165af752e0118a619a87cd3a61b270fbc235d9fb1fabcd8929cc55",
-    "zh:3aad47d28b72a0518de82b7036e483caed98d7b8cb5dccb95fc48eeec6f10e9d",
-    "zh:3b5a6518d394eec73f16ec9ee22e4c094b5b713b39495f2c566938de5adc8598",
-    "zh:830c3b001942cbafd7424e6007ce82257165eca4a71266dc7a0f34a4014d5d40",
-    "zh:9b1cb1bcee513a0a52a16a60a4190c232395bf952ebd5b13675b90485a20ae1a",
-    "zh:af6a00bf6febe7c2941f26e3af4599db42750ab36311531bf7625fd546636da6",
-    "zh:ba9df3040bc839048ea0716e23f565d1487866f13f0d61f3aacf3cfda27aca24",
-    "zh:d9635ebe6fb202b88ba8e817429f958ccc7fb0ff5d10049b9ebd5be062485cad",
-    "zh:fd0e31ada604a3a6cfbea4ca5d0db0d2f376e5aeb977e51f6b7f994c7b779bbc",
-    "zh:fd4bc575ec036dedc93bdd0da6d26dd8ded8b2bf9bf8f277c13ec26817bb5032",
+    "h1:eSnVMrHFd8XFIXYzo2DImTfY2192ygfvrxoDbKXc3+M=",
+    "zh:1533c31173b4789415e90cf68bace4e2443f7e3b2e45d81030cf2b9d552c1408",
+    "zh:1bae9b52367718a4e334b797655325709e2ef6f6289f1fb3605fc1bf2a303a69",
+    "zh:3c0cbf3916471a11c3094753ff8d0c622e0a9c90d9ce61c88cc9b65808a5958f",
+    "zh:5967fd1813193101eebc53d22e5ec90388439dd2fea557a0470194b0acc69bad",
+    "zh:67dc7a06d6ce97cbc56e8bd542de479bc3de23dfed1f7212014c7c4a97708af2",
+    "zh:72dc56612d386cb022150d53bb5ff0a50fc2fe63b4d7ed1ea18d509250b2c093",
+    "zh:8757dfd226e91c00595318ca87c8fbf36add746ae7d2b86120709c7ebde3d949",
+    "zh:b1c28197e1a74af768a1fd6c4e828a493fce0e663e4806e7f30448b73f4a68bd",
+    "zh:b4a07979901d1be45169b519f615022b18cde4658fbcda52c4039c181c7e5793",
+    "zh:b85ac442a95b57e632ff8470938d34b3bf0efe40dfec893e2538da7de93b3ea5",
+    "zh:f569b65999264a9416862bca5cd2a6177d94ccb0424f3a4ef424428912b9cb3c",
+    "zh:fe818cfe3ab69e15178b4c4e8915eda0fd0e33e5fd49408aa2541c2c1a46a8bf",
   ]
 }
 

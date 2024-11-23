@@ -3,15 +3,15 @@
 module "vpc" {
   source         = "./modules/vpc"                  # Path to the VPC module
   cluster_name             = var.cluster_name
-  cluster_location         = var.cluster_location
+  # cluster_location         = var.cluster_location
   region                   = var.region
-  standard_machine_type    = var.standard_machine_type
+  # standard_machine_type    = var.standard_machine_type
   vpc                      = var.vpc
   project                  = var.project
   gke_subnet_name          = var.gke_subnet_name
   gke_subnet_cidr          = var.gke_subnet_cidr
-  gke_subnet_cluster_cidr  = var.gke_subnet_cluster_cidr
-  gke_subnet_services_cidr = var.gke_subnet_services_cidr
+  # gke_subnet_cluster_cidr  = var.gke_subnet_cluster_cidr
+  # gke_subnet_services_cidr = var.gke_subnet_services_cidr
   gke_subnet_region        = var.gke_subnet_region
   ports                    = var.ports
   source_ranges            = var.source_ranges
@@ -69,7 +69,7 @@ module "gcr" {
 
 module "GKE" {
 source = "./modules/GKE-Cluster"
-region                      = var.region
+# region                      = var.region
   project                     = var.project
   cluster_name                = var.cluster_name
   cluster_location            = var.cluster_location
@@ -79,12 +79,12 @@ region                      = var.region
   gke_subnet_cluster_cidr     = var.gke_subnet_cluster_cidr
   gke_subnet_services_cidr    = var.gke_subnet_services_cidr
   master_ipv4_cidr_block      = var.master_ipv4_cidr_block
-  gke_subnet_region           = var.gke_subnet_region
+  # gke_subnet_region           = var.gke_subnet_region
   min-master-version          = var.min-master-version
   standard_min_node_count     = var.standard_min_node_count
   standard_max_node_count     = var.standard_max_node_count
   standard_machine_type       = var.standard_machine_type
-  node_disk_type = var.node_disk_type
+  # node_disk_type = var.node_disk_type
   node_disk_size_gb = var.node_disk_size_gb
 }
 
