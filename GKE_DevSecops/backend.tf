@@ -1,6 +1,7 @@
 terraform {
+  required_version = ">= 1.3.0, < 2.0.0"
  backend "gcs" {
-   bucket  = "application-tfstate-121321"
+   bucket  = "gcp-poc-project1"
    prefix  = "terraform/state"
  }
 }

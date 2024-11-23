@@ -70,11 +70,11 @@ variable "node_disk_size_gb" {
   type        = number
 }
 
-variable "node_count" {
-  description = "The number of nodes in the pool"
-  type        = number
-  default     = 1
-}
+# variable "node_count" {
+#   description = "The number of nodes in the pool"
+#   type        = number
+#   default     = 1
+# }
 variable "node_disk_type" {
   description = "The disk type for the worker nodes (e.g., pd-standard)"
   type        = string
@@ -256,35 +256,35 @@ variable "master_ipv4_cidr_block" {
   type        = string
   description = "GKE private CIDR"
 }
-variable "database" {
-  description = "The name of the Cloud SQL database"
-  type        = string
-}
+# variable "database" {
+#   description = "The name of the Cloud SQL database"
+#   type        = string
+# }
 
-variable "tier" {
-  description = "The machine type/tier for the Cloud SQL instance (e.g., db-n1-standard-1)"
-  type        = string
-}
+# variable "tier" {
+#   description = "The machine type/tier for the Cloud SQL instance (e.g., db-n1-standard-1)"
+#   type        = string
+# }
 
-variable "disk_size" {
-  description = "The size of the disk (in GB) for the Cloud SQL instance"
-  type        = number
-}
+# variable "disk_size" {
+#   description = "The size of the disk (in GB) for the Cloud SQL instance"
+#   type        = number
+# }
 
-variable "db_user_name" {
-  description = "The custom username for the database user"
-  type        = string
-}
+# variable "db_user_name" {
+#   description = "The custom username for the database user"
+#   type        = string
+# }
 
-variable "db_password" {
-  description = "The password for the database user (stored securely in Secret Manager)"
-  type        = string
-  sensitive   = true
-}
-variable "private_network" {
-  description = "The private network self-link for the Cloud SQL instance"
-  type        = string
-}
+# variable "db_password" {
+#   description = "The password for the database user (stored securely in Secret Manager)"
+#   type        = string
+#   sensitive   = true
+# }
+# variable "private_network" {
+#   description = "The private network self-link for the Cloud SQL instance"
+#   type        = string
+# }
 
 # Note, after a name db instance is used, it cannot be reused for up to one week.
 variable "name_prefix" {
