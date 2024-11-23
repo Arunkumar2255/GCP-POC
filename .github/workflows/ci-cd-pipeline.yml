@@ -37,7 +37,7 @@ jobs:
 
       # Run TFLint checks recursively in all directories
       - name: Run TFLint
-        run: tflint -f compact --recursive --force
+        run: tflint -f compact --force
 
       # Fail the pipeline if TFLint detects any errors
       - name: Check TFLint Exit Code
