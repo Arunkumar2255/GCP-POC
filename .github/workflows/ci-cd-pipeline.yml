@@ -67,6 +67,11 @@ jobs:
       - name: Verify Credentials File
         run: ls -la $HOME/sa-key.json && cat $HOME/sa-key.json
 
+      # Verify Permissions
+      - name: Check Permissions
+        run: ls -l $HOME/sa-key.json
+
+
       # Initialize Terraform
       - name: Terraform Init
         env:
