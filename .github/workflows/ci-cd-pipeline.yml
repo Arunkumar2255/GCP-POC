@@ -7,7 +7,7 @@ on:
 
 jobs:
   terraform-gcp:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       # Checkout Repository
