@@ -1,14 +1,7 @@
+name: Terraform CI/CD Pipeline
  
- 
- 
- 
- 
- 
- 
- 
- 
-name: Create resources using Terraform on GCP
- 
+# Trigger the workflow on push or pull request to the main branch
+
 on:
 
   push:
@@ -16,175 +9,101 @@ on:
     branches:
 
       - main
+
+  pull_request:
+
+    branches:
+
+      - main
  
+# Define jobs for the workflow
+
 jobs:
 
-  terraform-gcp:
+  terraform:
 
-    runs-on: self-hosted
+    name: Terraform Workflow
 
+    runs-on: ubuntu-latest
+ 
     steps:
 
-      # Checkout Repository
+      # Step 1: Checkout the repository
 
-      - name: Check out Git Repository
+      - name: Checkout repository
 
         uses: actions/checkout@v3
  
-      # Debug Directory Structure
+      # Step 2: Set up Terraform CLI
 
-      - name: Debug Directory
+      - name: Setup Terraform
 
-        run: |
-
-          echo "Working directory structure:"
-
-          ls -la ${{ github.workspace }}
- 
-      # Cache TFLint plugins directory
-
-      - name: Cache TFLint plugins directory
-
-        uses: actions/cache@v2
+        uses: hashicorp/setup-terraform@v2
 
         with:
 
-          path: ~/.tflint.d/plugins
-
-          key: ${{ runner.os }}-tflint-${{ hashFiles('.tflint.hcl') }}
+          terraform_version: 1.5.5 # Specify your required Terraform version
  
-      # Set up TFLint
+      # Step 3: Configure Google Cloud Credentials
 
-      - name: Setup TFLint
-
-        uses: terraform-linters/setup-tflint@v2
-
-        with:
-
-          github_token: ${{ secrets.GKE_GITHUB_TOKEN }}
- 
-      # Print TFLint version
-
-      - name: Show TFLint version
-
-        run: tflint --version
- 
-      # Initialize TFLint plugins
-
-      - name: Initialize TFLint
-
-        run: tflint --init
- 
-      # Run TFLint checks recursively in all directories
-
-      - name: Run TFLint
-
-        run: tflint -f compact --recursive --force
- 
-      # Install Terraform
-
-      - name: Install Terraform
-
-        run: |
-
-          wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
-
-          echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-
-          sudo apt update || true
-
-          sudo apt install -y terraform || echo "Terraform installation failed"
- 
-      # Set Up Google Credentials
-
-      - name: Set Up Google Credentials
-
-        run: |
-
-          echo "${{ secrets.GOOGLE_CREDENTIALS }}" > /home/urolime/actions-runner/_work/GCP-POC/GCP-POC/gha-creds.json
+      - name: Authenticate with GCP
 
         env:
 
-          GOOGLE_APPLICATION_CREDENTIALS: /home/urolime/actions-runner/_work/GCP-POC/GCP-POC/gha-creds.json
- 
-      # Debug Credentials Path
-
-      - name: Verify Credentials Path
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
 
         run: |
 
-          echo "Checking credentials file:"
+          echo "${{ secrets.GCP_CREDENTIALS }}" > $HOME/gcp-key.json
 
-          ls -la /home/urolime/actions-runner/_work/GCP-POC/GCP-POC/
-
-          echo "Contents of credentials file (sanitized):"
-
-          head -n 5 /home/urolime/actions-runner/_work/GCP-POC/GCP-POC/gha-creds.json
+          export GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcp-key.json
  
-      # Initialize Terraform
+      # Step 4: Initialize Terraform
 
       - name: Terraform Init
 
-        working-directory: ./GKE_DevSecops
+        run: |
 
-        env:
+          cd GKE_DevSecOps
 
-          GOOGLE_APPLICATION_CREDENTIALS: /home/urolime/actions-runner/_work/GCP-POC/GCP-POC/gha-creds.json
-
-        run: terraform init
+          terraform init
  
-      # Format Terraform files
+      # Step 5: Validate Terraform configuration
 
-      - name: Terraform Format
+      - name: Terraform Validate
 
-        working-directory: ./GKE_DevSecops
+        run: |
 
-        run: terraform fmt
+          cd GKE_DevSecOps
+
+          terraform validate
  
-      # Run Terraform lint checks
-
-      - name: Terraform Lint
-
-        working-directory: ./GKE_DevSecops
-
-        run: tflint
- 
-      # Generate Terraform execution plan
+      # Step 6: Plan Terraform changes
 
       - name: Terraform Plan
 
-        working-directory: ./GKE_DevSecops
+        run: |
 
-        env:
+          cd GKE_DevSecOps
 
-          GOOGLE_APPLICATION_CREDENTIALS: /home/urolime/actions-runner/_work/GCP-POC/GCP-POC/gha-creds.json
-
-        run: terraform plan
+          terraform plan -out=tfplan
  
-      # Apply Terraform configuration
+      # Step 7: (Optional) Apply Terraform changes (Requires Manual Approval)
 
       - name: Terraform Apply
 
-        working-directory: ./GKE_DevSecops
+        if: github.event_name == 'push'
 
-        env:
+        run: |
 
-          GOOGLE_APPLICATION_CREDENTIALS: /home/urolime/actions-runner/_work/GCP-POC/GCP-POC/gha-creds.json
+          cd GKE_DevSecOps
 
-        run: terraform apply -auto-approve -input=false
+          terraform apply -auto-approve tfplan
  
-      # Optional: Destroy resources
+      # Step 8: Clean up temporary files
 
-      - name: Terraform Destroy
+      - name: Clean Up
 
-        if: always()
-
-        working-directory: ./GKE_DevSecops
-
-        env:
-
-          GOOGLE_APPLICATION_CREDENTIALS: /home/urolime/actions-runner/_work/GCP-POC/GCP-POC/gha-creds.json
-
-        run: terraform destroy -auto-approve -input=false
+        run: rm -f $HOME/gcp-key.json
 
  
