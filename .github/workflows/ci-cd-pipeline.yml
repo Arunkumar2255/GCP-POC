@@ -1,4 +1,7 @@
-
+ 
+ 
+ 
+ 
  
  
  
@@ -114,9 +117,9 @@ jobs:
 
           ls -la /home/urolime/actions-runner/_work/GCP-POC/GCP-POC/
 
-          echo "Credentials File Content:"
+          echo "Contents of credentials file (sanitized):"
 
-          cat /home/urolime/actions-runner/_work/GCP-POC/GCP-POC/gha-creds.json
+          head -n 5 /home/urolime/actions-runner/_work/GCP-POC/GCP-POC/gha-creds.json
  
       # Initialize Terraform
 
@@ -126,7 +129,7 @@ jobs:
 
         env:
 
-          GOOGLE_APPLICATION_CREDENTIALS:  ${{ secrets.GOOGLE_CREDENTIALS }}
+          GOOGLE_APPLICATION_CREDENTIALS: /home/urolime/actions-runner/_work/GCP-POC/GCP-POC/gha-creds.json
 
         run: terraform init
  
