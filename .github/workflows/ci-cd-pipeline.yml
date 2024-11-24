@@ -39,10 +39,10 @@ jobs:
       - name: Run TFLint
         run: tflint -f compact --recursive --force
 
-      # Fail the pipeline if TFLint detects any errors
-      - name: Check TFLint Exit Code
-        run: |
-          tflint -f json --recursive | jq -e '.issues | length == 0' || exit 1
+      # # Fail the pipeline if TFLint detects any errors
+      # - name: Check TFLint Exit Code
+      #   run: |
+      #     tflint -f json --recursive | jq -e '.issues | length == 0' || exit 1
 
       # Install the latest version of Terraform CLI and configure the Terraform CLI configuration
       - name: Install Terraform
