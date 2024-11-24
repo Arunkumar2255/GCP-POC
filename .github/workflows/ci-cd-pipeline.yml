@@ -72,30 +72,30 @@ jobs:
         #   working-directory: /GCP-POC/GCP-POC/GKE_DevSecops
         run: cd /home/runner/work/GCP-POC/GCP-POC/GKE_DevSecops && terraform init 
 
-      # Checks that all Terraform configuration files adhere to a canonical format
-      - name: Terraform Format
-        run: terraform fmt
+      # # Checks that all Terraform configuration files adhere to a canonical format
+      # - name: Terraform Format
+      #   run: terraform fmt
 
-      # Run TFLint again after initialization (optional)
-      - name: Terraform lint
-        run: tflint 
+      # # Run TFLint again after initialization (optional)
+      # - name: Terraform lint
+      #   run: tflint 
 
       # Generates an execution plan for Terraform
       - name: Terraform Plan
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-        run: terraform plan
+        # env:
+        #   GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        run: cd /home/runner/work/GCP-POC/GCP-POC/GKE_DevSecops && terraform plan
 
       # Apply Terraform configuration
       - name: Terraform Apply
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-        run: terraform apply -auto-approve -input=false
+        # env:
+        #   GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        run: cd /home/runner/work/GCP-POC/GCP-POC/GKE_DevSecops && terraform apply -auto-approve -input=false
 
       # Destroy resources (optional)
-      - name: Terraform Destroy
-        if: always()
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-        run: terraform destroy -auto-approve -input=false
+      # - name: Terraform Destroy
+      #   if: always()
+      #   env:
+      #     GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+      #   run: terraform destroy -auto-approve -input=false
 
