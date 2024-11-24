@@ -114,7 +114,7 @@ jobs:
 
         env:
 
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+          GOOGLE_APPLICATION_CREDENTIALS: /home/urolime/actions-runner/_work/GCP-POC/GCP-POC/gha-creds-98206690a91a562a.json
 
         run: terraform init
  
