@@ -1,3 +1,9 @@
++++
+ 
+ 
+ 
+ 
+ 
 name: Create resources using Terraform on GCP
  
 on:
@@ -13,7 +19,7 @@ jobs:
   terraform-gcp:
 
     runs-on: self-hosted
- 
+
     steps:
 
       # Checkout Repository
@@ -86,17 +92,19 @@ jobs:
 
           sudo apt install -y terraform || echo "Terraform installation failed"
  
-      # Authenticate via SAKE
+      # Set Up Google Credentials
 
-      - name: 'Authenticate via SAKE'
+      - name: Set Up Google Credentials
 
-        uses: 'google-github-actions/auth@v2'
+        run: |
 
-        with:
+          echo "${{ secrets.GOOGLE_CREDENTIALS }}" > /home/urolime/actions-runner/_work/GCP-POC/GCP-POC/gha-creds.json
 
-          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+        env:
+
+          GOOGLE_APPLICATION_CREDENTIALS: /home/urolime/actions-runner/_work/GCP-POC/GCP-POC/gha-creds.json
  
-      # Verify credentials path
+      # Debug Credentials Path
 
       - name: Verify Credentials Path
 
@@ -105,6 +113,10 @@ jobs:
           echo "Checking credentials file:"
 
           ls -la /home/urolime/actions-runner/_work/GCP-POC/GCP-POC/
+
+          echo "Credentials File Content:"
+
+          cat /home/urolime/actions-runner/_work/GCP-POC/GCP-POC/gha-creds.json
  
       # Initialize Terraform
 
@@ -114,7 +126,7 @@ jobs:
 
         env:
 
-          GOOGLE_APPLICATION_CREDENTIALS: /home/urolime/actions-runner/_work/GCP-POC/GCP-POC/gha-creds-98206690a91a562a.json
+          GOOGLE_APPLICATION_CREDENTIALS: /home/urolime/actions-runner/_work/GCP-POC/GCP-POC/gha-creds.json
 
         run: terraform init
  
@@ -130,7 +142,7 @@ jobs:
 
       - name: Terraform Lint
 
-        working-directory: ./GCP-POC/GKE_DevSecops
+        working-directory: ./GKE_DevSecops
 
         run: tflint
  
@@ -138,11 +150,11 @@ jobs:
 
       - name: Terraform Plan
 
-        working-directory: ./GCP-POC/GKE_DevSecops
+        working-directory: ./GKE_DevSecops
 
         env:
 
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+          GOOGLE_APPLICATION_CREDENTIALS: /home/urolime/actions-runner/_work/GCP-POC/GCP-POC/gha-creds.json
 
         run: terraform plan
  
@@ -150,11 +162,11 @@ jobs:
 
       - name: Terraform Apply
 
-        working-directory: ./GCP-POC/GKE_DevSecops
+        working-directory: ./GKE_DevSecops
 
         env:
 
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+          GOOGLE_APPLICATION_CREDENTIALS: /home/urolime/actions-runner/_work/GCP-POC/GCP-POC/gha-creds.json
 
         run: terraform apply -auto-approve -input=false
  
@@ -164,11 +176,11 @@ jobs:
 
         if: always()
 
-        working-directory: ./GCP-POC/GKE_DevSecops
+        working-directory: ./GKE_DevSecops
 
         env:
 
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+          GOOGLE_APPLICATION_CREDENTIALS: /home/urolime/actions-runner/_work/GCP-POC/GCP-POC/gha-creds.json
 
         run: terraform destroy -auto-approve -input=false
 
